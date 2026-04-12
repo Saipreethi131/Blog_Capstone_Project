@@ -1,0 +1,56 @@
+### Author REGISTRATION
+POST http://localhost:5000/common-api/register
+Content-Type: application/json
+
+{
+    "firstName":"Author2",
+    "lastName":"",
+    "email":"geeta@gmail.com",
+    "password":"geeta",
+    "role":"author",
+    "profileImageUrl":"",
+    "isUserActive":true
+}
+### AUTHOR LOGIN
+POST http://localhost:5000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"dimplekuntla@gmail.com",
+    "password":"dimple"
+}
+
+### CREATE NEW ARTICLE (protected route)
+POST http://localhost:5000/author-api/create
+Content-Type: application/json
+
+{
+    "author":"69b3aca4dc6007ef5a33b851",
+    "title":"Article2",
+    "category":"AI",
+    "content":"Test article on AI"
+}
+
+### READ ARTICLE
+GET http://localhost:5000/author-api/article
+
+### UPDATE ARTICLE
+PUT http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+    "articleId":"69b3cb8cacc2748ac41d2966",
+    "title":"Article2",
+    "category":"Artificial Intelligence",
+    "content":"Test article on Artificial Intelligence"
+}
+
+### DELETE ARTICLE BY ARTICLE ID (soft delete) 
+### Can be Restored by setting isArticleActive:false
+PATCH http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+    "articleId":"69b3cb8cacc2748ac41d2966",
+    "isArticleActive":false
+}

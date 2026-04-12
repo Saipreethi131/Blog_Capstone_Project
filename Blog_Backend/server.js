@@ -1,0 +1,65 @@
+import exp from 'express'
+import {config} from 'dotenv'
+import {connect} from 'mongoose'
+import {userapp} from "./APIs/UserAPI.js"
+import {authorapp} from "./APIs/AuthorAPI.js"
+import {articleapp} from "./APIs/ArticleAPI.js"
+import {commonapp} from "./APIs/CommonAPI.js"
+import cookieParser from "cookie-parser"
+import cors from "cors"
+
+config()
+const app=exp()
+
+app.use(cors({
+  origin: 'http://localhost:5173', // allow your frontend origin
+  credentials: true // if you need to send cookies(for tokens)
+}));
+
+
+app.use(exp.json())
+app.use(cookieParser())
+app.use('/user-api',userapp)
+app.use('/author-api',authorapp)
+app.use('/article-api',articleapp)
+app.use('/common-api',commonapp)
+
+
+
+//connect to database
+const connectDB=async()=>{
+    try{
+        await connect(process.env.DB_URL)
+        console.log("Database server connected")
+        //assign port 
+   const port=process.env.PORT || 5000
+   app.listen(port,()=>console.log(`server listening on ${port}...`))
+
+    }catch(err){
+        console.log("error in DB connect",err)
+    }
+}
+connectDB();
+
+//******** ERROR HANDLING MIDDLEWARE*******/
+//to handle invalid path
+app.use((req,res,next)=>{
+   // res.status(404).json({message:"Invalid path"}) 
+    res.status(404).json({message:`path ${req.url} is invalid`}) 
+})
+//to handle errors
+app.use((err,req,res,next)=>{
+    
+    console.log(err.name)
+    if(err.name==="ValidationError")
+    {
+       return res.status(400).json({message:"validation error",error:err.message})
+    }
+    if(err.name==="CastError")
+    {
+       return res.status(400).json({message:"cast error",error:err.message})
+    }
+    //server side errors
+    res.status(500).json({message:"Server side errors",error:err.message})
+  
+})

@@ -1,0 +1,46 @@
+### REGISTRATION (USER,AUTHOR)
+POST http://localhost:5000/common-api/register
+Content-Type: application/json
+
+{
+    "firstName":"User3",
+    "lastName":"",
+    "email":"user3@gmail.com",
+    "password":"",
+    "role":"user",
+    "profileImageUrl":"",
+    "isUserActive":"true"
+}
+
+### USER LOGIN
+POST http://localhost:5000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"preethikuntla@gmail.com",
+    "password":"preethi"
+}
+
+### USER LOGOUT
+GET http://localhost:5000/common-api/logout
+
+### CHANGE PASSWORD
+PUT http://localhost:5000/common-api/password
+Content-Type: application/json
+
+{
+    "currentpassword":"preethikuntla",
+    "newpassword":"preethi"
+}
+
+###READ ARTICLES OF ALL AUTHORS
+GET http://localhost:5000/user-api/articles
+
+### ADD COMMENT TO AN ARTICLE
+PUT http://localhost:5000/user-api/article
+Content-Type: application/json
+
+{
+    "articleId":"69b3bfa4824570e844470c90",
+    "comment":"Great Work"
+}
