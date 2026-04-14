@@ -1,0 +1,125 @@
+# Blog Application (MERN)
+
+This is my full stack blog project built with MERN.
+
+It has two parts:
+- Blog_Backend (Node.js, Express, MongoDB)
+- Blog_Frontend (React + Vite)
+
+## What this app does
+
+- Users can register and login
+- Authors can create, update, delete/restore their own articles
+- Users can read articles and add comments
+- Admin can view users/authors and block or activate them
+
+## Tech used
+
+Backend:
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT + cookie based auth
+- bcrypt
+
+Frontend:
+- React
+- React Router
+- Zustand (auth state)
+- Axios
+- Tailwind CSS
+
+## Project structure
+
+- Blog_Backend
+  - APIs
+  - Models
+  - Middleware
+  - config
+  - server.js
+- Blog_Frontend
+  - src/Components
+  - src/store
+  - src/styles
+
+## How to run
+
+### 1. Backend
+
+Go to backend folder:
+
+```bash
+cd Blog_Backend
+```
+
+Install packages:
+
+```bash
+npm install
+```
+
+Create .env file and add:
+
+- PORT
+- DB_URL
+- SECRET_KEY
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+
+Start backend:
+
+```bash
+node server.js
+```
+
+Backend runs on:
+- http://localhost:5000
+
+### 2. Frontend
+
+Open new terminal and go to frontend folder:
+
+```bash
+cd Blog_Frontend
+```
+
+Install packages:
+
+```bash
+npm install
+```
+
+Run frontend:
+
+```bash
+npm run dev
+```
+
+Frontend runs on:
+- http://localhost:5173
+
+## Main API groups
+
+- /common-api
+  - register
+  - login
+  - logout
+  - change password
+- /user-api
+  - read all active articles
+  - add comment
+- /author-api
+  - create article
+  - read own articles
+  - update article
+  - soft delete/restore article
+- /admin-api
+  - list users/authors
+  - block/activate user or author
+
+## Notes
+
+- Auth is handled using JWT token in httpOnly cookie.
+- Role based access is used in protected routes.
+- Request sample files are available inside Blog_Backend folder.
