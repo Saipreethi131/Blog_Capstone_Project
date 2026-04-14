@@ -112,7 +112,9 @@ commonapp.put("/password",verifyToken("user","author","admin"),async(req,res)=>{
     userdocument.password = hashnewpassword
     //save
     await userdocument.save()
+    const safeUser = userdocument.toObject()
+    delete safeUser.password
     //send res
-    res.status(200).json({message:"Password Updaed succesfully",payload:userdocument})
+    res.status(200).json({message:"Password Updated successfully",payload:safeUser})
 })
 

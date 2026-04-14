@@ -3,8 +3,8 @@ import {config} from 'dotenv'
 import {connect} from 'mongoose'
 import {userapp} from "./APIs/UserAPI.js"
 import {authorapp} from "./APIs/AuthorAPI.js"
-import {articleapp} from "./APIs/ArticleAPI.js"
 import {commonapp} from "./APIs/CommonAPI.js"
+import {adminApp} from "./APIs/AdminAPI.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
@@ -21,8 +21,8 @@ app.use(exp.json())
 app.use(cookieParser())
 app.use('/user-api',userapp)
 app.use('/author-api',authorapp)
-app.use('/article-api',articleapp)
 app.use('/common-api',commonapp)
+app.use('/admin-api',adminApp)
 
 
 

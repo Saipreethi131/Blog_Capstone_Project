@@ -9,5 +9,13 @@ Content-Type: application/json
 
 ### CHANGE PASSWORD
 ### READ ALL USERS AND AUTHORS (ONLY EMAILS)
+GET http://localhost:5000/admin-api/users
 
 ### BLOCK OR ACTIVATE USER OR AUTHOR
+PATCH http://localhost:5000/admin-api/user-status
+Content-Type: application/json
+
+{
+    "email":"user3@gmail.com",
+    "isUserActive":false
+}

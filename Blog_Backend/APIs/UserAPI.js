@@ -30,26 +30,6 @@ userapp.put("/article",verifyToken("user"),async(req,res)=>{
     res.status(200).json({message:"Comment added successfully"})
 })
 
-//Add comment to the article
-userapp.put("/article:id",verifyToken("user"),async(req,res)=>{
-    //get req from body
-    const comment=req.body
-    const id = req.params
-    let article = await articleModel.findOne({_id:id,isArticleActive:true})
-    if(!article)
-    {
-        return res.status(400).json({message:"Article not found"})
-    }
-    //get user ID
-    const userId = req.user.id
-    //add comment to comments array of article document
-    article.comments.push({user:userId,comment:comment})
-    //save
-    await article.save();
-    //send res
-    res.status(200).json({message:"Comment added successfully"})
-})
-
 
 
 
