@@ -28,7 +28,7 @@ function UserProfile() {
       setLoading(true);
       try {
         //read articles of all authors
-        let res=await axios.get("http://localhost:5000/user-api/articles",{withCredentials:true})
+        let res=await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/user-api/articles`,{withCredentials:true})
         //update articles state
         if(res.status===200){
           setArticles(res.data.payload)
@@ -120,6 +120,13 @@ function UserProfile() {
                 <div className="flex flex-col h-full">
                   {/* TOP */}
                   <div>
+                    <div className="flex justify-between items-center w-full mb-1">
+                      <span className="text-[0.65rem] font-semibold text-[#0066cc] uppercase tracking-widest">{articleObj.category}</span>
+                      <span className="text-[10px] text-[#a1a1a6] font-medium flex items-center gap-1.5">
+                        ❤️ {articleObj.likes?.length || 0}
+                      </span>
+                    </div>
+
                     <p className={articleTitle}>{articleObj.title}</p>
 
                     <p className="text-sm text-[#6e6e73] mt-1">{articleObj.content.slice(0, 80)}...</p>

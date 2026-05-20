@@ -23,25 +23,34 @@ function Register() {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
-  const [preview, setPriview] = useState(null);
+  const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
 
   //When user registration submitted
   const onUserRegister = async (userObj) => {
     console.log(userObj);
-    const registerPayload = {
-      role: userObj.role,
-      firstName: userObj.firstName,
-      lastName: userObj.lastName,
-      email: userObj.email,
-      password: userObj.password,
-      profileImageUrl: "",
-    };
+    const formData = new FormData();
+    formData.append("role", userObj.role);
+    formData.append("firstName", userObj.firstName);
+    formData.append("lastName", userObj.lastName || "");
+    formData.append("email", userObj.email);
+    formData.append("password", userObj.password);
+    
+    // Check if there is an image in profileImageUrl input
+    if (userObj.profileImageUrl && userObj.profileImageUrl[0]) {
+      formData.append("profileImage", userObj.profileImageUrl[0]);
+    }
+
     try {
       //start loading
       setLoading(true);
       //make HTTP POST req to create User in backend
-      let res = await axios.post("http://localhost:5000/common-api/register", registerPayload,{withCredentials:true});
+      let res = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/common-api/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
 
       if (res.status === 201) {
         //navigate to Login
@@ -177,6 +186,12 @@ function Register() {
               className={inputClass}
               accept="image/png, image/jpeg"
               {...register("profileImageUrl", {
+                onChange: (event) => {
+                  let file = event.target.files[0];
+                  if (file) {
+                    setPreview(URL.createObjectURL(file));
+                  }
+                },
                 validate: {
                   fileType: (files) => {
                     if (!files?.[0]) return true;
@@ -188,12 +203,6 @@ function Register() {
                   },
                 },
               })}
-              onChange={(event) => {
-                let file = event.target.files[0];
-                if (file) {
-                  setPriview(URL.createObjectURL(file));
-                }
-              }}
             />
 
             {errors.profileImageUrl && <p className={errorClass}>{errors.profileImageUrl.message}</p>}

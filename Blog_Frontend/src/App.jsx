@@ -3,6 +3,7 @@ import RootLayout from "./Components/RootLayout";
 import Home from "./Components/Home";
 import Register from "./Components/Register";
 import Login from "./Components/Login";
+import ForgotPassword from "./Components/ForgotPassword";
 import UserProfile from "./Components/UserProfile";
 import AuthorProfile from "./Components/AuthorProfile";
 import AuthorArticles from "./Components/AuthorArticles";
@@ -30,6 +31,10 @@ function App() {
         {
           path: "login",
           element: <Login />,
+        },
+        {
+          path: "forgot-password",
+          element: <ForgotPassword />,
         },
         {
           path: "user-profile",

@@ -33,6 +33,11 @@ const articleSchema =new Schema({
         type:String,
         required:[true,"category is required"],
     },
+    likes:{
+        type:[Types.ObjectId],
+        ref:"user",
+        default:[]
+    },
     comments:[{type:commentSchema,default:[]}],
     isArticleActive:{
         type:Boolean,

@@ -4,10 +4,14 @@ import {toast} from "react-hot-toast";
 
 function ProtectedRoute({ children, allowedRoles }) {
   //get user login status from store
-  const { loading, currentUser, isAuthenticated} = useAuth();
+  const { loading, isCheckingAuth, currentUser, isAuthenticated} = useAuth();
   //loading state
-  if (loading) {
-    return <p>Loading...</p>;
+  if (isCheckingAuth || loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <p className="text-[#0066cc]/60 text-sm animate-pulse">Verifying session...</p>
+      </div>
+    );
   }
   //if user not loggedin
   if (!isAuthenticated) {

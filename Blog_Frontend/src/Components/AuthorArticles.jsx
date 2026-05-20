@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../store/authStore";
 
 import {
+  articleGrid,
   articleCardClass,
   articleTitle,
   articleExcerpt,
@@ -33,7 +34,7 @@ function AuthorArticles() {
       try {
         setLoading(true);
         //read articles of current author
-        let res = await axios.get("http://localhost:5000/author-api/article", { withCredentials: true });
+        let res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/author-api/article`, { withCredentials: true });
         if (res.status === 200) {
           setArticles(res.data.payload);
         }
@@ -70,7 +71,7 @@ function AuthorArticles() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className={articleGrid}>
       {articles.map((article) => (
         <div key={article._id} className={`${articleCardClass} relative flex flex-col`}>
           {/* Status Badge */}
@@ -79,7 +80,12 @@ function AuthorArticles() {
           </span>
 
           <div className="flex flex-col gap-2">
-            <p className={articleMeta}>{article.category}</p>
+            <div className="flex justify-between items-center w-full">
+              <p className={articleMeta}>{article.category}</p>
+              <span className="text-[10px] text-[#a1a1a6] font-medium flex items-center gap-1.5">
+                ❤️ {article.likes?.length || 0}
+              </span>
+            </div>
 
             <p className={articleTitle}>{article.title}</p>
 

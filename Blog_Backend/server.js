@@ -12,7 +12,7 @@ config()
 const app=exp()
 
 app.use(cors({
-  origin: 'http://localhost:5173', // allow your frontend origin
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // allow your frontend origin dynamically
   credentials: true // if you need to send cookies(for tokens)
 }));
 
@@ -50,16 +50,19 @@ app.use((req,res,next)=>{
 //to handle errors
 app.use((err,req,res,next)=>{
     
-    console.log(err.name)
+    console.log(err.name, err.code)
+    if (err.code === 11000) {
+        return res.status(400).json({message:"Email already exists"})
+    }
     if(err.name==="ValidationError")
     {
-       return res.status(400).json({message:"validation error",error:err.message})
+       return res.status(400).json({message:err.message})
     }
     if(err.name==="CastError")
     {
-       return res.status(400).json({message:"cast error",error:err.message})
+       return res.status(400).json({message:err.message})
     }
     //server side errors
-    res.status(500).json({message:"Server side errors",error:err.message})
+    res.status(500).json({message:err.message || "Server side errors"})
   
 })

@@ -26,6 +26,7 @@ import {
   commentUser,
   commentTime,
   commentText,
+  primaryBtn,
 } from "../styles/common.js";
 import { useForm } from "react-hook-form";
 
@@ -51,7 +52,7 @@ function ArticleByID() {
       setLoading(true);
 
       try {
-        const res = await axios.get(`http://localhost:5000/user-api/article/${id}`, { withCredentials: true });
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/user-api/article/${id}`, { withCredentials: true });
 
         setArticle(res.data.payload);
       } catch (err) {
@@ -81,7 +82,7 @@ function ArticleByID() {
 
     try {
       const res = await axios.patch(
-        "http://localhost:5000/author-api/article",
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/author-api/article`,
         { articleId: article._id, isArticleActive: newStatus },
         { withCredentials: true },
       );
@@ -115,7 +116,7 @@ function ArticleByID() {
     //add artcileId
     commentObj.articleId = article._id;
     try {
-      let res = await axios.put("http://localhost:5000/user-api/article", commentObj, { withCredentials: true });
+      let res = await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/user-api/article`, commentObj, { withCredentials: true });
       if (res.status === 200) {
         setArticle((prev) => ({
           ...prev,
@@ -127,6 +128,32 @@ function ArticleByID() {
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to add comment");
     }
+  };
+
+  const handleLike = async () => {
+    if (!user) {
+      toast.error("Please login to like articles");
+      return;
+    }
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/user-api/article/like`,
+        { articleId: article._id },
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        setArticle(res.data.payload);
+        const hasLiked = res.data.payload.likes?.includes(user._id || user.id);
+        toast.success(hasLiked ? "Liked article!" : "Unliked article");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to toggle like");
+    }
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied to clipboard!");
   };
 
  // console.log("article",article)
@@ -145,10 +172,63 @@ function ArticleByID() {
         <h1 className={`${articleMainTitle} uppercase`}>{article.title}</h1>
 
         <div className={articleAuthorRow}>
-          <div className={authorInfo}>✍️ {user?.role}</div>
+          <div className={authorInfo}>
+            ✍️ {article.author ? `${article.author.firstName} ${article.author.lastName || ""}` : "Author"}
+          </div>
 
           <div>{formatDate(article.createdAt)}</div>
         </div>
+      </div>
+
+      {/* Likes & Share Action Bar */}
+      <div className="flex items-center gap-3 border-b border-[#e8e8ed] pb-4 mb-8 text-sm">
+        {/* LIKE BUTTON */}
+        <button
+          onClick={handleLike}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full border transition duration-200 cursor-pointer ${
+            article.likes?.includes(user?._id || user?.id)
+              ? "bg-[#ff3b30]/10 border-[#ff3b30]/20 text-[#ff3b30] hover:bg-[#ff3b30]/20"
+              : "bg-[#f5f5f7] border-[#e8e8ed] text-[#6e6e73] hover:bg-[#ebebf0] hover:text-[#1d1d1f]"
+          }`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill={article.likes?.includes(user?._id || user?.id) ? "#ff3b30" : "none"}
+            stroke={article.likes?.includes(user?._id || user?.id) ? "#ff3b30" : "currentColor"}
+            strokeWidth="2"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+            />
+          </svg>
+          <span className="font-semibold text-xs">{article.likes?.length || 0}</span>
+        </button>
+
+        {/* SHARE BUTTON */}
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-2 px-4 py-2 rounded-full border bg-[#f5f5f7] border-[#e8e8ed] text-[#6e6e73] hover:bg-[#ebebf0] hover:text-[#1d1d1f] transition duration-200 cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186l.965.483m-.965-.483a2.25 2.25 0 01-1.07-1.916V7.89a2.25 2.25 0 011.07-1.916m0 0a2.25 2.25 0 100-2.186m0 2.186l.965.483m-.965-.483a2.25 2.25 0 011.07 1.916v3.013a2.25 2.25 0 01-1.07 1.916m0 0a2.25 2.25 0 100 2.186"
+            />
+          </svg>
+          <span className="font-semibold text-xs">Share</span>
+        </button>
       </div>
 
       {/* Content */}
@@ -169,15 +249,16 @@ function ArticleByID() {
       {/* form to add comment if role is USER */}
       {/* USER actions */}
       {user?.role === "user" && (
-        <div className={articleActions}>
-          <form onSubmit={handleSubmit(addComment)}>
+        <div className="mt-8 border-t border-[#e8e8ed] pt-8">
+          <h4 className="text-sm font-semibold text-[#1d1d1f] mb-3">Add a public comment</h4>
+          <form onSubmit={handleSubmit(addComment)} className="flex flex-col sm:flex-row gap-3 w-full">
             <input
               type="text"
-              {...register("comment")}
-              className={inputClass}
+              {...register("comment", { required: true })}
+              className={`${inputClass} flex-grow`}
               placeholder="Write your comment here..."
             />
-            <button type="submit" className="bg-amber-600 text-white px-5 py-2 rounded-2xl mt-5">
+            <button type="submit" className={`${primaryBtn} whitespace-nowrap self-start sm:self-auto`}>
               Add comment
             </button>
           </form>
