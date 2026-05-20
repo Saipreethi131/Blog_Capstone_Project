@@ -1,10 +1,15 @@
-# Blog Application (MERN)
+# MyBlog — Full-Stack MERN Capstone Project
 
-This is my full stack blog project built with MERN.
+This is a full-stack blog application built with MongoDB, Express, React, and Node.js (MERN) as a Capstone Training Project.
+
+### 🌐 Live Production Deployment
+* **Website Link**: [blog-capstone-project-nu.vercel.app](https://blog-capstone-project-nu.vercel.app/)
+* **Backend Host**: Render.com (Web Service)
+* **Database Host**: MongoDB Atlas Cloud (Shared Tier)
 
 It has two parts:
-- Blog_Backend (Node.js, Express, MongoDB)
-- Blog_Frontend (React + Vite)
+- **[Blog_Backend](file:///d:/MERN%20Training/BLOG/Blog_Backend)** (Node.js, Express, MongoDB)
+- **[Blog_Frontend](file:///d:/MERN%20Training/BLOG/Blog_Frontend)** (React, Vite, Tailwind CSS)
 
 ## What this app does
 
