@@ -78,12 +78,12 @@ commonapp.post("/login",async(req,res)=>{
     const signedtoken=sign({id:user._id,email:email,role:user.role},
         process.env.SECRET_KEY,
         {expiresIn:"1h"});
- //set Token to res header as httponly cookie
- res.cookie("token",signedtoken,{
-    httpOnly:true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
- });
+  const isProduction = process.env.NODE_ENV === 'production' || !req.headers.origin?.includes('localhost');
+  res.cookie("token",signedtoken,{
+     httpOnly:true,
+     secure: isProduction,
+     sameSite: isProduction ? "none" : "lax",
+  });
  //remove password from the user document before sending the response
  let userobj=user.toObject();
  delete userobj.password;
@@ -97,10 +97,11 @@ commonapp.post("/login",async(req,res)=>{
 //synchronous function (no asynchronous operations)
 commonapp.get("/logout",(req,res)=>{
     //delete the token from cookie storage
+    const isProduction = process.env.NODE_ENV === 'production' || !req.headers.origin?.includes('localhost');
     res.clearCookie("token",{
         httpOnly:true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax"
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax"
     })
     //send res
     res.status(200).json({message:"Logout Success"})
