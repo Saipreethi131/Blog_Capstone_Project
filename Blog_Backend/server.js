@@ -11,8 +11,13 @@ import cors from "cors"
 config()
 const app=exp()
 
+let frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+if (frontendOrigin.endsWith('/')) {
+  frontendOrigin = frontendOrigin.slice(0, -1);
+}
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // allow your frontend origin dynamically
+  origin: frontendOrigin, // allow your frontend origin dynamically (robust trailing slash check)
   credentials: true // if you need to send cookies(for tokens)
 }));
 
