@@ -1,6 +1,17 @@
 import { create } from "zustand";
 import axios from "axios";
 
+// Setup axios request interceptor to automatically add Authorization header (cross-site cookie fallback)
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 export const useAuth = create((set) => ({
   currentUser: null,
   loading: false,
@@ -12,6 +23,9 @@ export const useAuth = create((set) => ({
       set({ loading: true, currentUser: null, isAuthenticated: false, error: null });
       let res = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/common-api/login`, userCred, { withCredentials: true });
       if (res.status === 200 || res.status === 201) {
+        if (res.data?.token) {
+          localStorage.setItem("token", res.data.token);
+        }
         set({
           currentUser: res.data?.payload,
           loading: false,
@@ -40,6 +54,7 @@ export const useAuth = create((set) => ({
     try {
       let res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/common-api/logout`, { withCredentials: true });
       if (res.status === 200) {
+        localStorage.removeItem("token");
         set({
           currentUser: null,
           isAuthenticated: false,
@@ -48,6 +63,7 @@ export const useAuth = create((set) => ({
         });
       }
     } catch (err) {
+      localStorage.removeItem("token");
       set({
         loading: false,
         isAuthenticated: false,
@@ -67,6 +83,7 @@ export const useAuth = create((set) => ({
         isCheckingAuth: false,
       });
     } catch (err) {
+      localStorage.removeItem("token");
       if (err.response?.status === 401) {
         set({
           currentUser: null,

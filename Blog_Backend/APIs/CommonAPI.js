@@ -87,7 +87,7 @@ commonapp.post("/login",async(req,res)=>{
  //remove password from the user document before sending the response
  let userobj=user.toObject();
  delete userobj.password;
- res.status(201).json({message:"Login succesfull",payload:userobj})
+ res.status(201).json({message:"Login succesfull",payload:userobj,token:signedtoken})
 })
 
 

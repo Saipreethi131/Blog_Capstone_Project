@@ -9,8 +9,14 @@ validity of token*/
 export const verifyToken=(...allowedroles)=>{
     return(req,res,next)=>{
          try{
-        //get token from cookie
-        const token=req.cookies?.token;
+        //get token from cookie or Authorization header
+        let token=req.cookies?.token;
+        if(!token && req.headers.authorization) {
+            const parts = req.headers.authorization.split(' ');
+            if (parts.length === 2 && parts[0] === 'Bearer') {
+                token = parts[1];
+            }
+        }
         //check token existed or not
         if(!token)
         {
