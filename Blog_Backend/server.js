@@ -17,8 +17,13 @@ if (frontendOrigin.endsWith('/')) {
 }
 
 app.use(cors({
-  origin: frontendOrigin, // allow your frontend origin dynamically (robust trailing slash check)
-  credentials: true // if you need to send cookies(for tokens)
+  origin: (origin, callback) => {
+    // If no origin (e.g. mobile apps, postman, server-to-server), allow it
+    if (!origin) return callback(null, true);
+    // Dynamically allow the request's exact origin to prevent CORS errors on Vercel/Render
+    return callback(null, true);
+  },
+  credentials: true // allows cookies to be sent back and forth
 }));
 
 

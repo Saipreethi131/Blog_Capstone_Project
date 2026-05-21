@@ -32,7 +32,7 @@ function Articles() {
           setArticles(res.data.payload || []);
         }
       } catch (err) {
-        setError(err.response?.data?.error || "Failed to load articles");
+        setError(err.response?.data?.message || err.response?.data?.error || "Failed to load articles");
       } finally {
         setLoading(false);
       }

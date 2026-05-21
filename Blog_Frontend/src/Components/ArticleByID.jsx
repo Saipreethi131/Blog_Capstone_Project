@@ -56,7 +56,7 @@ function ArticleByID() {
 
         setArticle(res.data.payload);
       } catch (err) {
-        setError(err.response?.data?.error);
+        setError(err.response?.data?.message || err.response?.data?.error || "Failed to load article");
       } finally {
         setLoading(false);
       }

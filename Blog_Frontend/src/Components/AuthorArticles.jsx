@@ -41,7 +41,7 @@ function AuthorArticles() {
         //update articles state
       } catch (err) {
         console.log(err);
-        setError(err.response?.data?.error || "Failed to fetch articles");
+        setError(err.response?.data?.message || err.response?.data?.error || "Failed to fetch articles");
       } finally {
         setLoading(false);
       }

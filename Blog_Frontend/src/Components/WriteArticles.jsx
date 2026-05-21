@@ -46,7 +46,7 @@ function WriteArticles() {
         // navigate("./author-profile/articles");
       }
     } catch (err) {
-       toast.error(err.response?.data?.error || "Failed to publish article");
+       toast.error(err.response?.data?.message || err.response?.data?.error || "Failed to publish article");
     } finally {
       setLoading(false);
     }
