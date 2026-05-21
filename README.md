@@ -3,7 +3,7 @@
 This is a full-stack blog application built with MongoDB, Express, React, and Node.js (MERN) as a Capstone Training Project.
 
 ### 🌐 Live Production Deployment
-* **Website Link**: [blog-capstone-project-nu.vercel.app](https://blog-capstone-project-nu.vercel.app/)
+* **Website Link**: [blog-capstone-project-b45.vercel.app](https://blog-capstone-project-b45.vercel.app/)
 * **Backend Host**: Render.com (Web Service)
 * **Database Host**: MongoDB Atlas Cloud (Shared Tier)
 
