@@ -4,7 +4,7 @@ import {articleModel} from "../Models/ArticleModel.js"
 import {verifyToken} from "../Middleware/verifyToken.js"
 
 //***** READ ARTICLES OF ALL AUTHORS *****
-userapp.get("/articles",verifyToken("user"),async(req,res,next)=>{
+userapp.get("/articles",async(req,res,next)=>{
     try {
         //read articles populated with comments' users and author
         let articleslist = await articleModel.find({isArticleActive:true})
@@ -18,7 +18,7 @@ userapp.get("/articles",verifyToken("user"),async(req,res,next)=>{
 })
 
 //***** READ SINGLE ARTICLE BY ID *****
-userapp.get("/article/:id",verifyToken("user","author"),async(req,res,next)=>{
+userapp.get("/article/:id",async(req,res,next)=>{
     try {
         const {id}=req.params
         let articleObj = await articleModel.findOne({_id:id,isArticleActive:true})

@@ -5,6 +5,7 @@ import Register from "./Components/Register";
 import Login from "./Components/Login";
 import ForgotPassword from "./Components/ForgotPassword";
 import UserProfile from "./Components/UserProfile";
+import Articles from "./Components/Articles";
 import AuthorProfile from "./Components/AuthorProfile";
 import AuthorArticles from "./Components/AuthorArticles";
 import EditArticle from './Components/EditArticle'
@@ -39,6 +40,10 @@ function App() {
         {
           path: "user-profile",
           element: <UserProfile />,
+        },
+        {
+          path: "articles",
+          element: <Articles />,
         },
         {
           path: "author-profile",

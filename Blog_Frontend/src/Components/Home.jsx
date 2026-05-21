@@ -48,10 +48,10 @@ function Home() {
           ) : !isAuthenticated ? (
             <div className="flex flex-wrap gap-4 mt-8">
               <NavLink
-                to="/register"
+                to="/articles"
                 className="bg-[#0066cc] text-white text-sm font-semibold px-7 py-3 rounded-full hover:bg-[#004499] shadow-sm hover:shadow transition transform hover:-translate-y-0.5 cursor-pointer"
               >
-                Create Account
+                Explore Articles
               </NavLink>
               <NavLink
                 to="/login"
